@@ -1,0 +1,2 @@
+# CLionOpencvShareLib
+#Linux
