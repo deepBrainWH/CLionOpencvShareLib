@@ -1,8 +1,7 @@
 import tensorflow as tf
 
 
-def conv(X, kernel_shape, stride, activation='relu', use_bias=True, padding='SAME', device='/GPU:0',
-         with_pooling=False, pooling_size=None, pooling_stride=None, pooling_padding='SAME', name='ConvNet'):
+def conv(X, kernel_shape, stride, activation='relu', use_bias=True, padding='SAME', device='/GPU:0', name='ConvNet'):
     """
     :param X: input tensor: 4-dim: [batch_size, height, width, channel]
     :param kernel_shape: filter kernel: 4-dim: [x, y, in-dim, out-dim]
@@ -32,14 +31,25 @@ def conv(X, kernel_shape, stride, activation='relu', use_bias=True, padding='SAM
                 conv_ = tf.nn.sigmoid(conv_, activation)
             elif activation == 'tanh':
                 conv_ = tf.nn.tanh(conv_, activation)
-
-            if with_pooling:
-                if pooling_size is None or pooling_stride is None:
-                    raise Exception("If using pooling, you have to assign the value of pooling_size and pooling_stride")
-                else:
-                    conv_ = tf.nn.max_pool(conv_, pooling_size, [1, pooling_stride[0], pooling_stride[1], 1],
-                                           pooling_padding, name='max_pool')
+            elif activation == 'leaky_relu':
+                conv_ = tf.nn.leaky_relu(conv_, 0.2, activation)
+            else:
+                raise Exception("Unknown activate function :" + activation)
             return conv_
+
+
+def max_pooling(X, kernel_shape, stride, padding='SAME', name='max_pooling'):
+    """
+    :param X: input value.
+    :param kernel_shape: kernel shape, 2 dimension.
+    :param stride: 2 dimension
+    :param padding: SAME or VALID
+    :param name:
+    :return:
+    """
+    if len(kernel_shape)!= 2:raise Exception("the kernel shape of max pooling must be 2 dimension")
+    return tf.nn.max_pool(X, [1, kernel_shape[0], kernel_shape[1], 1], [1, stride[0], stride[1], 1], padding, name=name)
+
 
 
 def fc(X, unit_size, activation='sigmoid', device='/GPU:0', name='full_connect', keep_prob=0):
@@ -52,10 +62,10 @@ def fc(X, unit_size, activation='sigmoid', device='/GPU:0', name='full_connect',
     """
     with tf.name_scope(name):
         with tf.device(device):
-            x_shape = X.shape.as_list()
-            if len(X.shape.as_list()) != 2:
+            if len(X.get_shape()) != 2:
                 raise Exception("The input tensor 'X' must have 2 dimension")
-            w = tf.random.normal([X.shape.as_list()[1], unit_size], name='weight')
+            in_dim = X.get_shape()[1].value
+            w = tf.random.normal([in_dim, unit_size], name='weight')
             b = tf.random.normal([unit_size], name='bias')
             fc_ = tf.matmul(X, w, name='matmul')
             fc_ = tf.nn.bias_add(fc_, b)
@@ -71,4 +81,3 @@ def fc(X, unit_size, activation='sigmoid', device='/GPU:0', name='full_connect',
                 fc_ = tf.nn.softmax(fc_, name=activation)
             fc_ = tf.nn.dropout(fc_, keep_prob, name='dropout')
             return fc_
-
