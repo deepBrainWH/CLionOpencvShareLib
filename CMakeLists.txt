@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.13)
+project(CLionOpencv)
+
+set(CMAKE_CXX_STANDARD 14)
+set(OpenCV_DIR "C:\\ProgramFiles\\opencv\\mingw_build")
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+#add_executable(CLionOpencv main.cpp cvlib/cv_operation.cc)
+add_library(CLionOpencv SHARED cvlib/cv_operation.cc)
+target_link_libraries(CLionOpencv ${OpenCV_LIBS})
