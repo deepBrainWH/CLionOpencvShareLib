@@ -19,15 +19,13 @@ public:
         VideoCapture capture(0);
         destroyAllWindows();
     }
-
-    void resize_image(char* str, int width, int height){
+    void resize_image(char* str, int width, int height, char* outpuPath){
         string path(str);
+        string output_path(outpuPath);
         Mat image = imread(path, IMREAD_ANYCOLOR);
         Size size(width, height);
         resize(image, image, size);
-        imshow("resize", image);
-        waitKey(0);
-        destroyAllWindows();
+        imwrite(output_path, image);
     }
 };
 
@@ -36,8 +34,8 @@ extern "C"{
     void show_image_c(){
         obj.show_image();
     }
-    void resize_image(char* str, int wigth, int height){
-        obj.resize_image(str, wigth, height);
+    void resize_image(char* str, int wigth, int height, char* outputPath){
+        obj.resize_image(str, wigth, height, outputPath);
     }
     void add_test(int a, int b){
         cout<<a<<"\t"<<b;
