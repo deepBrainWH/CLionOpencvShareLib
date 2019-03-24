@@ -29,6 +29,7 @@ class myyolo:
         conv8 = nn_utils.conv(conv7, [3, 3, 1024, 512], [1, 1], True, "leaky_relu")
         conv9 = nn_utils.conv(conv8, [1,1,512, 425],[1,1], True, "leaky_relu")
 
+
         log("conv1:\t" + "input-->" + str(self.image.shape.as_list()[1:]) + "\toutput-->" + str(
             conv1.shape.as_list()[1:]))
         log("max1:\t" + "input-->" + str(conv1.shape.as_list()[1:]) + "\toutput-->" + str(max1.shape.as_list()[1:]))
@@ -45,6 +46,8 @@ class myyolo:
         log("conv7:\t" + "input-->" + str(conv7.shape.as_list()[1:]) + "\toutput-->" + str(conv7.shape.as_list()[1:]))
         log("conv8:\t" + "input-->" + str(conv8.shape.as_list()[1:]) + "\toutput-->" + str(conv8.shape.as_list()[1:]))
         log("conv9:\t"+"input-->"+str(conv9.shape.as_list()[1:])+"\toutput-->"+str(conv9.shape.as_list()[1:]))
+
+
 
 
 
