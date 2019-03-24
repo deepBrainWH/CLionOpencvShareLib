@@ -3,7 +3,7 @@ from py.utils import nn_utils
 
 
 def log(value):
-    print("\033[34m" + value + "\033[0m")
+    print(value)
 
 
 class myyolo:

@@ -39,9 +39,9 @@ def conv(X, kernel_shape, stride, with_bn=True, activation='relu', use_bias=True
                 raise Exception("Unknown activate function :" + activation)
             if with_bn:
                 means_, vars_ = tf.nn.moments(conv_, [0, 1, 2])
-                offset = tf.Variable(tf.zeros([1, kernel_shape[3]]))
-                scale = tf.Variable(tf.ones([1, kernel_shape[3]]))
-                epsilon = tf.Variable(tf.ones([1, kernel_shape[3]]) * 0.01)
+                offset = tf.Variable(tf.zeros([1, kernel_shape[3]]), name="offset")
+                scale = tf.Variable(tf.ones([1, kernel_shape[3]]),name="scale")
+                epsilon = tf.Variable(tf.ones([1, kernel_shape[3]]) * 0.01, name="epsilon")
                 normalization = tf.nn.batch_normalization(conv_, means_, vars_, offset, scale, epsilon,
                                                           "batch_normalization")
                 return normalization
@@ -61,7 +61,7 @@ def max_pooling(X, kernel_shape, stride, padding='SAME', name='max_pooling'):
     return tf.nn.max_pool(X, [1, kernel_shape[0], kernel_shape[1], 1], [1, stride[0], stride[1], 1], padding, name=name)
 
 
-def fc(X, unit_size, activation='sigmoid', device='/GPU:0', name='full_connect', keep_prob=0):
+def fc(X, unit_size, activation='sigmoid', device='/GPU:0', name='full_connect', keep_prob=1.0):
     """
     :param X: input tensor
     :param unit_size: the unit size of this layer.
