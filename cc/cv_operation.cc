@@ -5,10 +5,11 @@
 #include <opencv/cv.h>
 #include <opencv2/opencv.hpp>
 #include <string>
+
 using namespace cv;
 using namespace std;
 
-class ImageOpeartion{
+class ImageOpeartion {
 public:
     void show_image() {
         Mat image = imread(R"(C:\Users\wangheng\Pictures\IMG_20190315_163220.png)", IMREAD_COLOR);
@@ -19,7 +20,8 @@ public:
         VideoCapture capture(0);
         destroyAllWindows();
     }
-    void resize_image(char* str, int width, int height, char* outpuPath){
+
+    void resize_image(char *str, int width, int height, char *outpuPath) {
         string path(str);
         string output_path(outpuPath);
         Mat image = imread(path, IMREAD_ANYCOLOR);
@@ -29,17 +31,17 @@ public:
     }
 };
 
-extern "C"{
-    ImageOpeartion obj;
-    void show_image_c(){
-        obj.show_image();
-    }
-    void resize_image(char* str, int wigth, int height, char* outputPath){
-        obj.resize_image(str, wigth, height, outputPath);
-    }
-    void add_test(int a, int b){
-        cout<<a<<"\t"<<b;
-    }
+extern "C" {
+ImageOpeartion obj;
+void show_image_c() {
+    obj.show_image();
+}
+void resize_image(char *str, int wigth, int height, char *outputPath) {
+    obj.resize_image(str, wigth, height, outputPath);
+}
+void add_test(int a, int b) {
+    cout << a << "\t" << b;
+}
 }
 
 
